@@ -1,6 +1,7 @@
-#  MAML-Pytorch
+#  Reptile-Pytorch
 PyTorch implementation of the supervised learning experiments from the paper:
-Model-Agnostic Meta-Learning (MAML): https://arxiv.org/abs/1703.03400
+Reptile: A Scalable Meta-Learning Algorithm: https://blog.openai.com/reptile/
+, which is based on Model-Agnostic Meta-Learning (MAML): https://arxiv.org/abs/1703.03400
 
 
 
