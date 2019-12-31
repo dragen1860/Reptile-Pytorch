@@ -12,8 +12,8 @@ class Learner(nn.Module):
 	This is a learner class, which will accept a specific network module, such as OmniNet that define the network forward
 	process. Learner class will create two same network, one as theta network and the other acts as theta_pi network.
 	for each episode, the theta_pi network will copy its initial parameters from theta network and update several steps
-	by meta-train set and then calculate its loss on meta-test set. All loss on meta-test set will be sumed together and
-	then backprop on theta network, which should be done on metalaerner class.
+	by meta-train set and then calculate its loss on meta-test set. All loss on meta-test set will be summed together and
+	then backprop on theta network, which should be done on meta-learner class.
 	For learner class, it will be responsible for update for several steps on meta-train set and return with the loss on
 	meta-test set.
 	"""
@@ -85,7 +85,7 @@ class Learner(nn.Module):
 		loss, pred = self.net_pi(query_x, query_y)
 		# pred: [setsz, n_way], indices: [setsz]
 		_, indices = torch.max(pred, dim=1)
-		correct = torch.eq(indices, query_y).sum().data[0]
+		correct = torch.eq(indices, query_y).sum().data.item()
 		acc = correct / query_y.size(0)
 
 		# gradient for validation on theta_pi
@@ -98,7 +98,7 @@ class Learner(nn.Module):
 
 	def net_forward(self, support_x, support_y):
 		"""
-		This function is purely for updating net network. In metalearner, we need the get the loss op from net network
+		This function is purely for updating net network. In meta-learner, we need the get the loss op from net network
 		to write our merged gradients into net network, hence will call this function to get a dummy loss op.
 		:param support_x: [setsz, c, h, w]
 		:param support_y: [sessz, c, h, w]
@@ -110,8 +110,8 @@ class Learner(nn.Module):
 
 class MetaLearner(nn.Module):
 	"""
-	As we have mentioned in Learner class, the metalearner class will receive a series of loss on different tasks/episodes
-	on theta_pi network, and it will merage all loss and then sum over it. The summed loss will be backproped on theta
+	As we have mentioned in Learner class, the meta-learner class will receive a series of loss on different tasks/episodes
+	on theta_pi network, and it will merge all loss and then sum over it. The summed loss will be backproped on theta
 	network to update theta parameters, which is the initialization point we want to find.
 	"""
 
